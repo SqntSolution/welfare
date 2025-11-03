@@ -67,8 +67,8 @@ springdoc:
     disabled: true
 
 location:
-  fileupload: "/workspace/tf-cms-deploy/download/fileupload"
-  image: "/workspace/tf-cms-deploy/download/image"
+  fileupload: "/workspace/welfare-deploy/download/fileupload"
+  image: "/workspace/welfare-deploy/download/image"
 
 sso:
   server:
