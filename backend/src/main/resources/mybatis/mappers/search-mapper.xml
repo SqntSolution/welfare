@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tf.cms.biz.user.search.SearchMapperDao">
+
+    <select
+            id="getSearchPost"
+            parameterType="com.tf.cms.biz.user.search.SearchParam"
+            resultType="com.tf.cms.biz.user.search.SearchPostResponseDto"
+            useCache="false"
+    >
+        with tb_post as (
+            select
+                t1.post_id as 'id',
+                t1.post_type,
+                t1.title,
+                t1.description,
+                t3.tag,
+                t1.open_type,
+                t1.enabled,
+                t1.representative_image_path,
+                t1.auth_level,
+                t1.menu_id1,
+                t1.menu_id2,
+                t1.created_at,
+                t1.created_user_id,
+                t1.created_user_nm,
+                t2.view_cnt,
+                t2.likes_cnt,
+                (t4.post_id is not null and t4.user_id is not null) as 'userLikeYn',
+                (t5.post_id is not null and t5.user_id is not null) as 'userScrapYn'
+            from
+                tb_post_contents t1
+            left join tb_post_meta_statistics t2
+                on t1.post_id = t2.post_id
+            left join tb_post_meta_tag t3
+                on t1.post_id = t3.post_id
+            left join tb_user_likes t4
+                on t4.post_id = t1.post_id
+                and t4.user_id = #{userId}
+            left join tb_user_scrap t5
+                on t5.post_id = t1.post_id
+                and t5.user_id = #{userId}
+            where
+                t1.enabled = true
+                and t1.open_type = 'public'
+                and t1.post_type = 'post'
+                    <if test="authLevel &gt;= 0">
+                        and t1.authLevel &lt;= authLevel
+                    </if>
+                <if test="authGroupCodes != null and !authGroupCodes.isEmpty()">
+                    and t1.menu_id2 in (
+                        select
+                            s1.menu_id
+                        from
+                            tb_auth_group_menu_mapp s1
+                        where s1.auth_group_cd in
+                            <foreach item="authGroupCode" collection="authGroupCodes" open="(" separator="," close=")">
+                                #{authGroupCode}
+                            </foreach>
+                    )
+                </if>
+                <if test="authGroupCodes == null or authGroupCodes.isEmpty()">
+                    and 1=2
+                </if>
+        )
+        select
+            *
+        from
+            tb_post
+        where 1=1
+            <if test="keywords != null and !keywords.isEmpty()">
+                <foreach item="keyword" collection="keywords">
+                    and (title like concat('%', #{keyword}, '%') escape '!' or description like concat('%', #{keyword}, '%') escape '!' or tag = #{keyword})
+                </foreach>
+            </if>
+        group by
+            id
+        order by
+            created_at desc
+        limit #{pageNumber}, #{pageSize}
+    </select>
+
+    <select
+            id="getSearchPostCount"
+            parameterType="com.tf.cms.biz.user.search.SearchParam"
+            resultType="Int"
+            useCache="false"
+    >
+        with tb_post as (
+            select
+                t1.post_id,
+                t1.title,
+                t1.description,
+                t3.tag
+            from
+                tb_post_contents t1
+            left join tb_post_meta_statistics t2
+                on t1.post_id = t2.post_id
+            left join tb_post_meta_tag t3
+                on t1.post_id = t3.post_id
+            left join tb_user_likes t4
+                on t4.post_id = t1.post_id
+                and t4.user_id = #{userId}
+            left join tb_user_scrap t5
+                on t5.post_id = t1.post_id
+                and t5.user_id = #{userId}
+            where
+                t1.enabled = true
+                and t1.open_type = 'public'
+                and t1.post_type = 'post'
+                <if test="authLevel &gt;= 0">
+                    and t1.authLevel &lt;= authLevel
+                </if>
+                <if test="authGroupCodes != null and !authGroupCodes.isEmpty()">
+                    and t1.menu_id2 in (
+                    select
+                    s1.menu_id
+                    from
+                    tb_auth_group_menu_mapp s1
+                    where s1.auth_group_cd in
+                    <foreach item="authGroupCode" collection="authGroupCodes" open="(" separator="," close=")">
+                        #{authGroupCode}
+                    </foreach>
+                    )
+                </if>
+                <if test="authGroupCodes == null or authGroupCodes.isEmpty()">
+                    and 1=2
+                </if>
+        )
+        select
+            count(*)
+        from (
+            select
+                *
+            from
+                tb_post
+            where 1=1
+                <if test="keywords != null and !keywords.isEmpty()">
+                    <foreach item="keyword" collection="keywords">
+                        and (title like concat('%', #{keyword}, '%') escape '!' or description like concat('%', #{keyword}, '%') escape '!' or tag = #{keyword})
+                    </foreach>
+                </if>
+            group by
+                post_id
+        ) a1
+    </select>
+
+</mapper>

@@ -1,0 +1,91 @@
+env: prod
+
+server:
+  port: 9000
+  servlet:
+    session:
+      timeout: 480m
+
+  # https://docs.spring.io/spring-boot/docs/current/reference/html/application-properties.html#application-properties.server.server.tomcat.threads.max
+  # https://docs.spring.io/spring-boot/docs/current/reference/html/application-properties.html#application-properties.server.server.tomcat.max-connections
+  tomcat:
+    threads:
+      max: 400
+      min-spare: 10
+    max-connections: 10240
+
+spring:
+  servlet:
+    multipart:
+      max-file-size: 512MB
+      max-request-size: 512MB
+  datasource:
+    #    https://kim-jong-hyun.tistory.com/132
+    #    https://mariadb.com/kb/en/about-mariadb-connector-j/#compatibility-with-older-connectors-pre-34
+    #    https://mariadb.com/kb/en/about-mariadb-connector-j/#timezone-consideration
+    url: "jdbc:mariadb://cip001.cosmax.com:3306/cosmax?serverTimezone=UTC&useLegacyDatetimeCode=false"
+    driver-class-name: org.mariadb.jdbc.Driver
+    username: admin
+    password: CmInsight2024!
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+    static-path-pattern: /api-static/**
+  messages:
+    encoding: UTF-8
+
+  ldap:
+    urls: ldap://10.220.127.38:389
+    base: OU=COSMAXGroup,DC=cosmax,DC=ad
+    username: conact_pic
+    password: zjsprxm0112&#
+
+# https://www.baeldung.com/spring-rest-openapi-documentation
+# https://springdoc.org/#springdoc-openapi-core-properties
+springdoc:
+  version: '@springdoc.version@'
+  packages-to-scan: 'com.tf.cms'
+  api-docs:
+    version: openapi_3_1
+    path: /swagger/api-docs
+    enabled: false
+  swagger-ui:
+    path: /swagger/swagger-ui.html
+    display-request-duration: true
+    groups-order: DESC
+    operations-sorter: alpha
+    tags-sorter: alpha
+    doc-expansion : none
+    disable-swagger-default-url: true
+    use-root-path: true
+    enabled: false
+  cache:
+    disabled: true
+
+location:
+  fileupload: "/workspace/files/file"
+  image: "/workspace/files/image"
+
+sso:
+  server:
+    login-url: "https://websso.cosmax.com/sso/adLogin.do" # 고정, 운영계로 변경시만 도메인 수정
+    logout-url: "https://websso.cosmax.com/sso/adLogout.do" # 고정, 운영계로 변경시만 도메인 수정
+    check-sso-url: "https://websso.cosmax.com/sso/check.api" # 고정, 운영계로 변경시만 도메인 수정
+    public-key:
+      path: "classpath:/cosmax/keys/sso_public_key.pem" # 고정, 위치 변경시만 수정
+  agent:
+    private-key:
+      path: "classpath:/cosmax/keys/agent/agent_private_key.pem" # 고정, 위치 변경시만 수정
+    base:
+      url: "https://insight.cosmax.com" #"http://10.200.52.60"
+    site-code: "CSMT-INSIGHT-PRD"
+    site-password: "X%wR*sO!Plyq"
+    batch:
+      session:
+        check:
+          enable: "true" # true 고정
+
+ms:
+  teams:
+    send-url: "https://notiep.cosmax.com/ezTeamsNoti/api/notify"
+    link-domain: "https://insight.cosmax.com"

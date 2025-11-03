@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SSO 오류</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap" rel="stylesheet">
+</head>
+<body>
+<div class="sso-box">
+        <span class="img-box">
+            <img src="/api-static/sso-error.png" alt="에러이미지">
+        </span>
+    <h2 class="tit">SSO 오류가 발생했습니다</h2>
+    <p class="txt" th:text="${ssoErrorMsg}"></p>
+</div>
+</body>
+<style>
+    *{margin: 0;padding: 0;font-family: "Nunito", sans-serif;}
+    .sso-box{
+        text-align: center;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: center;
+        align-content: center;
+        width: 100%;
+        height: 100vh;
+    }
+    .sso-box .tit{
+        width: 100%;
+        margin-top: 56px;
+        font-size: 30px;
+        font-weight: 600;
+        line-height: 1;
+    }
+    .sso-box .txt{
+        width: 100%;
+        margin-top: 24px;
+        font-size: 16px;
+        font-weight: 400;
+        color: #8C8C8C;
+        line-height: 24px;
+    }
+</style>
+</html>

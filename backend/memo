@@ -1,0 +1,21 @@
+
+=== queryDSL 소스 generate
+gradle clean compileKotlin
+=> 위와 같이 해야만 QTable이 생성되더라. generateXXX 이런걸로는 안되더라.
+
+=== jar 생성
+gradlew bootJar
+
+=== regex
+this.mcuId = dto.mcuId
+this.chargerMngNo: String? = null,
+this.chargerStatus: String? = null,
+
+this\.(\w+):.*
+this.$1 = dto.$1
+
+=== gradle build in test server
+sh gradlew -x test clean bootJar -Pprofile=test
+
+=== gradle build in intellij
+gradle -x test clean bootJar -Pprofile=dev

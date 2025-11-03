@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ReverseEngineeringSettings">
+    <database-infos>
+      <database-info dbms-id="mysql">
+        <mapping-types>
+          <mapping-type sql-type="DATE" java-class="java.time.LocalDate" />
+          <mapping-type sql-type="DATETIME" java-class="java.time.LocalDateTime" />
+        </mapping-types>
+      </database-info>
+      <database-info dbms-id="maria">
+        <mapping-types>
+          <mapping-type sql-type="DATETIME" java-class="java.time.LocalDateTime" />
+          <mapping-type sql-type="DATE" java-class="java.time.LocalDate" />
+        </mapping-types>
+      </database-info>
+    </database-infos>
+  </component>
+</project>

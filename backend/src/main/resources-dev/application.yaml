@@ -1,0 +1,132 @@
+env: dev
+
+server:
+  port: 9500
+
+  # https://docs.spring.io/spring-boot/docs/current/reference/html/application-properties.html#application-properties.server.server.tomcat.threads.max
+  # https://docs.spring.io/spring-boot/docs/current/reference/html/application-properties.html#application-properties.server.server.tomcat.max-connections
+  tomcat:
+    threads:
+      max: 400
+      min-spare: 10
+    max-connections: 10240
+
+spring:
+  servlet:
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 100MB
+  datasource:
+    url: "jdbc:mariadb://172.27.37.56:3306/welfare"
+    #    url: "jdbc:mariadb://211.181.69.202:3306/welfare"  #=> 인터넷
+    driver-class-name: org.mariadb.jdbc.Driver
+    username: welfare
+    password: welfare000!!
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+    static-path-pattern: /api-static/**
+  messages:
+    encoding: UTF-8
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: sqntxcrm@gmail.com #leejaeini2025@gmail.com
+    password: iksqmmskorztxaao
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+  thymeleaf:
+    #    prefix: templates/
+    #    suffix: .html
+    #    mode: HTML
+    #    encoding: UTF-8
+    cache: false
+
+# https://www.baeldung.com/spring-rest-openapi-documentation
+# https://springdoc.org/#springdoc-openapi-core-properties
+springdoc:
+  version: '@springdoc.version@'
+  packages-to-scan: 'com.tf.cms'
+  api-docs:
+    version: openapi_3_1
+    path: /swagger/api-docs
+  swagger-ui:
+    path: /swagger/swagger-ui.html
+    display-request-duration: true
+    groups-order: DESC
+    operations-sorter: alpha
+    tags-sorter: alpha
+    doc-expansion : none
+    disable-swagger-default-url: true
+    use-root-path: true
+  cache:
+    disabled: true
+
+location:
+  fileupload: "/workspace/tf-cms-deploy/download/fileupload"
+  image: "/workspace/tf-cms-deploy/download/image"
+
+sso:
+  server:
+    login-url: "https://webssoq.cosmax.com/sso/adLogin.do" # 고정, 운영계로 변경시만 도메인 수정
+    logout-url: "https://webssoq.cosmax.com/sso/adLogout.do" # 고정, 운영계로 변경시만 도메인 수정
+    check-sso-url: "https://webssoq.cosmax.com/sso/check.api" # 고정, 운영계로 변경시만 도메인 수정
+    public-key:
+      path: "classpath:/cosmax/keys/sso_public_key.pem" # 고정, 위치 변경시만 수정
+  agent:
+    private-key:
+      path: "classpath:/cosmax/keys/agent/agent_private_key.pem" # 고정, 위치 변경시만 수정
+    base:
+      url: "http://10.210.52.60" #"https://insightq.cosmax.com"
+    site-code: "CSMT-INSIGHT-QA"
+    site-password: "agent2023!@#"
+    batch:
+      session:
+        check:
+          enable: "true" # true 고정
+
+ms:
+  teams:
+    send-url: "https://notiep.cosmax.com/ezTeamsNoti/api/notify"
+    link-domain: "https://insightd.cosmax.com"
+
+jwt:
+  auth:
+    secret: "tfcmssecretkeytfcmssecretkeytfcmssecretkeytfcmssecretkeytfcmssecretkeytfcmssecretkeytfcmssecretkeytfcmssecretkey"  # JWT 서명에 사용할 비밀키
+    expiration: 2592000000                # 만료 시간 (30일)
+    access-token-expiration: 3602000      # 만료 시간 (60분 +2초)
+    refresh-token-expiration: 86400000    # 만료 시간 (1일)
+  email:
+    secret: "emailsecretkeyemailsecretkeyemailsecretkeyemailsecretkeyemailsecretkeyemailsecretkeyemailsecretkeyemailsecretkey"  # JWT 서명에 사용할 비밀키
+    expiration: 900000                    # 만료 시간 (15분)
+    draw-expiration: 2592000000           # 만료 시간 (30일)
+
+kakao:
+  auth:
+    client-id: "02ae41e7a994b2e6f500526c44341ca3"
+    redirect-uri: "http://112.216.82.202:8020/api/v1/common/kakao/login"
+    user-info-url: "https://kapi.kakao.com/v2/user/me"
+    token-url: "https://kauth.kakao.com/oauth/token"
+
+google:
+  auth:
+    client-id: "89287183964-cu5d4dhi7oc7pa4kujhli2h4eh18397s.apps.googleusercontent.com"
+    client-secret: "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"
+    redirect-uri: "http://112.216.82.202:8020/api/v1/common/google/login"
+    user-info-url: "https://www.googleapis.com/oauth2/v3/userinfo"
+    token-url: "https://oauth2.googleapis.com/token"
+
+naver:
+  auth:
+    client-id: "ZP7jAOL1gcwYvbRbIjQO"
+    client-secret: "Z6IDOE5swt"
+    redirect-uri: "http://112.216.82.202:8020/api/v1/common/naver/login"
+    user-info-url: "https://openapi.naver.com/v1/nid/me"
+    token-url: "https://nid.naver.com/oauth2.0/token"
+
+domains:
+  cms: "http://112.216.82.202:8020"

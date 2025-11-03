@@ -1,0 +1,23 @@
+# 빌드 산출물
+.gradle/
+build/
+out/
+
+# IDE 설정
+.idea/
+*.iml
+
+# Git
+.git
+.gitignore
+
+# OS 파일
+.DS_Store
+
+# 테스트 커버리지, 로그
+*.log
+coverage/
+test-output/
+
+# Node (만약 포함될 경우)
+node_modules/

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd">
+	
+	<bean name="propertiesService" class="egovframework.rte.fdl.property.impl.EgovPropertyServiceImpl" destroy-method="destroy">
+		<property name="properties">
+			<map>				
+				<!-- ... 생략 .. -->
+
+				<!-- AD SSO 관련 -->
+				<entry key="sso.server.login-url" value="https://webssoq.cosmax.com/sso/adLogin.do"/>			<!--고정, 운영계로 변경시만 도메인 수정-->
+				<entry key="sso.server.logout-url" value="https://webssoq.cosmax.com/sso/adLogout.do"/>		<!--고정, 운영계로 변경시만 도메인 수정-->
+				<entry key="sso.server.check-sso-url" value="https://webssoq.cosmax.com/sso/check.api"/>  <!--고정, 운영계로 변경시만 도메인 수정-->
+
+				<entry key="sso.server.public-key.path" value="classpath:/cosmax/keys/sso_public_key.pem"/>	<!--고정, 위치 변경시만 수정 -->			
+				<entry key="sso.agent.private-key.path" value="classpath:/cosmax/keys/agent/agent_private_key.pem"/> <!--고정, 위치 변경시만 수정 -->			
+				
+				<entry key="sso.agent.base.url" value="https://rqpq.cosmax.com"/>	<!--자산관리 URL 로 변경-->
+				<entry key="sso.agent.site-code"  value="CSMT-RMM-QA"/>						<!--자산관리 site-code -->
+				<entry key="sso.agent.site-password" value="agent2023!@#"/>				<!--자산관리 passwd -->
+				<entry key="sso.agent.batch.session.check.enable" value="true"/>	<!--true 고정-->
+				<!-- //AD SSO 관련 -->
+
+				<!-- ... 생략 ... -->
+			</map>
+		</property>
+	</bean>
+	
+</beans>

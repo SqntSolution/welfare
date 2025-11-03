@@ -1,0 +1,183 @@
+==== install (ckeditor를 못 찾는다고 해도 npm install)
+npm install
+
+==== C:\Windows\System32\drivers\etc\hosts 에 추가할 내용 정리
+# 내 local pc 접속
+127.0.0.1      cosmax.local  
+# 사무실 내부망을 통해서 접속
+172.27.38.39   cosmax.remote            
+# 인터넷망을 통해서 접속
+211.181.69.202 cosmax-internet.remote  
+
+===== window용 nginx 다운로드
+https://nginx.org/download/nginx-1.24.0.zip
+
+
+===== nginx 설정
+
+	client_max_body_size 0;
+
+    server {
+        listen       80;
+        server_name  cosmax.local;
+
+        error_page   500 502 503 504  /50x.html;
+        location = /50x.html {
+            root   html;
+        }
+		
+		location / {
+			proxy_pass  http://localhost:3000  ;
+			proxy_http_version 1.1;
+			proxy_set_header Upgrade $http_upgrade;
+			proxy_set_header Connection "upgrade";
+			proxy_set_header Host $host;			
+		}
+		
+        location ~ ^(/api/|/api-static/|/swagger/) {
+          #rewrite ^(.*)$  $1  break;
+		  rewrite ^(.*)$  $1  break;
+		  proxy_pass http://127.0.0.1:9000;
+          # proxy_pass http://cosmax.remote:9000;  # => backend를 개발서버를 바라보도록 함.
+          # proxy_pass http://cosmax-internet.remote:8090;  # => backend를 개발서버(인터넷망)를 바라보도록 함.
+        }
+
+    }    
+
+
+==== hosts 등록
+c:\windows\system32\drivers\etc\hosts
+127.0.0.1   cosmax.local
+
+
+==== local 서버 접속
+http://cosmax.local
+
+
+==== local server start
+start nginx.exe
+(nginx 설정을 수정후, 재시작은 nginx.exe -s reload)
+npm run start
+springboot는 intellij 에서
+
+
+==== swager-ui url
+http://cosmax.local/swagger/swagger-ui/index.html
+
+
+==== cosmax 개발 서버 접속
+== hosts 등록 (c:\windows\system32\drivers\etc\hosts)
+172.27.38.39  cosmax.remote
+
+접속 => http://cosmax.remote
+        http://cosmax.remote/swagger/swagger-ui/index.html
+
+
+==== backend를 개발서버의 backend를 바라보도록 설정
+nginx 설정에서, api url에 대해서 개발서버를 바라보도록 수정후
+
+        location ~ ^(/api/|/swagger/) {
+          #rewrite ^(.*)$  $1  break;
+		  rewrite ^(.*)$  $1  break;
+          proxy_pass http://cosmax.remote:9000;
+        }
+
+nginx 적용 => nginx.exe -s reload
+
+
+==== dnd-kit 설치
+npm install @dnd-kit/sortable
+npm install @dnd-kit/modifiers
+
+
+==== vscode에서 color picker plugin
+vscode-color-picker
+
+
+==== 이미지를 가운데를 기준으로 해서 이미지를 보여주는 영역크기만 보여주는 css (CSS로 이미지 중앙만 잘라서 보여주는 방법)
+            <div style={{ width: '200px', height: '200px', backgroundColor:'yellow', }}>
+                <img style={{
+                    objectFit: "cover", margin:'auto', width:'100%', height:'100%',
+                }} src="https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png" />
+            </div>
+
+            
+==== [이건 안씀] ajax 처리시에 에러 메시지 보여주는 예 (밑의 useMsg로 대치)
+(참고:src\pages\user\post\PostPage.js)
+import { App, } from 'antd';
+import {ErrorMsg} from 'components/common/CustomComps'
+
+const { notification } = App.useApp();
+
+catch문 안에서 
+notification.error({message:<ErrorMsg msg={errorMsg(err)} />, placement:'top', duration:5});            
+
+
+=== ajax 처리시에 에러 또는 성공 메시지를 보여주는 hook
+ import { useMsg } from 'hooks/helperHook';
+ const {error, info} = useMsg()
+ catch문 안에서, error(err) 
+ 또는 저장한후에, info("저장하였습니다.")
+
+
+==== npm 운영 빌드
+npm run build-prod
+
+
+==== clipboard에 복사하는 useCopy 사용예 
+	import { useCopy } from 'hooks/helperHook';
+	const copy = useCopy()
+	const onShareClick = () => {
+		copy(`${window.location.href}`)
+	}
+
+
+==== 사용자 정보 
+import {useUserInfo} from 'hooks/useUserInfo'
+
+    const userInfo = useUserInfo()
+    console.log("=== userInfo : ", userInfo);
+(참고) SearchRow.js , 
+
+(userInfo에 들어가 있는 데이타)
+{
+    "env": "local",
+    "id": "112190028",
+    "name": "다자아",
+    "email": "wwwww@cosmax.com",
+    "phone": "",
+    "teamCode": "D0167",
+    "teamName": "IT기획팀",
+    "role": "ROLE_MASTER",
+    "contentsManagerAuthMenuNames": [['market-analysis','local'], ['strategy', 'trend']],
+    "strategicMarketingGroupYn": true
+}
+
+
+==== internet망을 통해서 개발 cosmax 접속
+1. 아래를 hosts에 등록
+211.181.69.202 cosmax-internet.remote
+
+2. 접속
+http://cosmax-internet.remote:8090/
+
+2.1. swagger 접속
+http://cosmax-internet.remote:8090/swagger/swagger-ui/index.html
+여기서 server를 http://cosmax-internet.remote:8090를 선택
+
+
+==== C:\Windows\System32\drivers\etc\hosts 에 추가할 내용 정리
+# 내 local pc 접속
+127.0.0.1      cosmax.local  
+# 사무실 내부망을 통해서 접속
+172.27.38.39   cosmax.remote            
+# 인터넷망을 통해서 접속
+211.181.69.202 cosmax-internet.remote  
+
+
+==== frontend의 port를 바꾸는 예
+기본이 3000 번인데, 다른 port 번호로 바꾸려고 할때, (xxx, cosmax를 같이 띄우고자 할때)
+package.json에서, 아래에서 PORT에 다른 번호를 지정
+    "start": "cross-env PORT=3010 react-scripts start",   
+
+
