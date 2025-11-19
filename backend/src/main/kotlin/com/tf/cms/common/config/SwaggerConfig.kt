@@ -11,14 +11,14 @@ import org.springframework.context.annotation.Configuration
 @OpenAPIDefinition(
     servers = arrayOf(
             Server(url="http://localhost"),
-            Server(url="http://cms.local"),
-            Server(url="http://localhost:9000"),
-            Server(url="http://cms.local:9000"),
-            Server(url="http://cms.remote:81"),
-            Server(url="http://172.27.37.56:81"),
+            Server(url="http://welfare.local"),
+            Server(url="http://localhost:9500"),
+            Server(url="http://welfare.local:9500"),
+            Server(url="http://welfare.remote:82"),
+            Server(url="http://172.27.37.56:82"),
 //            Server(url="http://10.210.52.60"),
     ),
-    info = Info(title = "TF-CMS API 명세서", description = "TF-CMS API 명세서", version = "v1")
+    info = Info(title = "WELFARE API 명세서", description = "WELFARE API 명세서", version = "v1")
 )
 @Configuration
 class SwaggerConfig {
